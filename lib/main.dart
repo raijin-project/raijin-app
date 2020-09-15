@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:raijin/common/theme.dart';
 import 'package:raijin/models/app.dart';
 import 'package:raijin/screens/home.dart';
@@ -6,10 +7,12 @@ import 'package:raijin/screens/login.dart';
 import 'package:raijin/screens/register.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (context) => AppModel(), child: App()),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   build(BuildContext context) {
     return MaterialApp(
