@@ -58,33 +58,57 @@ class _RegisterState extends State<Register> {
         ),
         title: Text("Register"),
       ),
-      body: Center(
-        child: Container(
-          margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _field('Instance'),
-                _field('Email'),
-                _field('Username'),
-                _field('Password', obfuscate: true),
-                RaisedButton(
-                  color: Colors.blue,
-                  child: Text("Submit"),
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      Future<Map> result = _submit(_formData);
-                    }
-                  },
-                )
-              ],
+      body: Builder(builder: (BuildContext context) {
+        return Center(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _field('Instance'),
+                  _field('Email'),
+                  _field('Username'),
+                  _field('Password', obfuscate: true),
+                  RaisedButton(
+                    color: Colors.blue,
+                    child: Text("Submit"),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        Future<Map> result = _submit(_formData);
+                        result.then((value) {
+                          if (value.containsKey('data')) {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text("Registration successful"),
+                            ));
+                            Navigator.pushReplacementNamed(context, '/');
+                          } else {
+                            if (value['errors'].containsKey('username')) {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text("Username already taken"),
+                              ));
+                            } else {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text('Registration failed'),
+                              ));
+                            }
+                          }
+                        }).catchError((error) {
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text("Something went wrong"),
+                          ));
+                        });
+                      }
+                    },
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
