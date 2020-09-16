@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:raijin/main.dart';
 
 class AppModel extends ChangeNotifier {
   bool loggedIn = false;

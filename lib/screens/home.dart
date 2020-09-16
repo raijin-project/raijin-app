@@ -21,9 +21,16 @@ class _HomeState extends State<Home> {
                 Text('Welcome to Raijin'),
                 RaisedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushNamed(context, '/login');
                   },
                   child: Text('Login'),
+                  color: Colors.blue,
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                  child: Text('Register'),
                   color: Colors.blue,
                 ),
               ],
