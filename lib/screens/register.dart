@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
+
+  Map<String, String> _formData = Map();
+
+  Future<Map> _submit(_formData) async {
+    final String url = _formData['Instance'] + '/api/users';
+
+    final response = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'user': {
+            'email': _formData['Email'],
+            'username': _formData['Username'],
+            'password': _formData['Password']
+          }
+        }));
+    // Remember to remove this
+    print(response.body);
+    return jsonDecode(response.body);
+  }
 
   TextFormField _field(String hintText, {bool obfuscate = false}) {
     return TextFormField(
         decoration: InputDecoration(hintText: hintText),
         obscureText: obfuscate,
+        onSaved: (value) {
+          _formData[hintText] = value;
+        },
         validator: (value) {
           if (value.isEmpty) {
             return 'Field is required';
@@ -42,7 +73,12 @@ class Register extends StatelessWidget {
                 RaisedButton(
                   color: Colors.blue,
                   child: Text("Submit"),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      Future<Map> result = _submit(_formData);
+                    }
+                  },
                 )
               ],
             ),

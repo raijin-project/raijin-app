@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class AppModel extends ChangeNotifier {
   bool loggedIn = false;
+  String url;
   User user;
 
   void login(Map<String, dynamic> data) {
