@@ -80,6 +80,8 @@ class _RegisterState extends State<Register> {
                         Future<Map> result = _submit(_formData);
                         result.then((value) {
                           if (value.containsKey('data')) {
+                            // This snackbar disappears too fast, maybe go to a
+                            // different screen instead or use another notifier?
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("Registration successful"),
                             ));
